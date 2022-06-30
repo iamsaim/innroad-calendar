@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './Calendar.css'
+import style from './Calendar.module.scss'
 import { Badge } from 'antd';
 import moment from 'moment';
 
@@ -30,7 +30,7 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
         const listData = getListData(new moment(new Date().setDate(value)));
         return (
 
-            <ul className="events">
+            <ul className={style["events"]}>
                 {listData.map((item) => (
                     <li key={item.content}>
                         <Badge status={item.type} text={item.content} />
@@ -68,7 +68,7 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
 
                             let clickDate = new moment(new Date().setDate(CurrentDay));
                             rows.push(<td>
-                                <div className={CurrentDay === new Date().getDate() ? "currentDay" : "day"} onClick={() => {
+                                <div className={CurrentDay === new Date().getDate() ? style["currentDay"] : style["day"]} onClick={() => {
                                     handleClick(clickDate)
                                 }}>
                                     {CurrentDay}
