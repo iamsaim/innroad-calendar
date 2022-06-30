@@ -17,3 +17,27 @@
 .notes-month section {
   font-size: 28px;
 }
+
+table{
+  width: 100%;
+}
+
+.day{
+  width: 190px;
+  height: 190px;
+  border:1px solid #00000026;
+}
+
+.currentDay{
+  width: 190px;
+  height: 190px;
+  border:1px solid black;
+  background: #eaeaf3;
+}
+
+.events .ant-badge-status {
+  white-space: break-spaces !important;
+
+}
+
+

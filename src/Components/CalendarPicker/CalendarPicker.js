@@ -1,11 +1,21 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './Calendar.css'
-import { Badge, Calendar, Select, Typography, Row, Col } from 'antd';
+import { Badge } from 'antd';
+import moment from 'moment';
+
+const MAX_NO_OF_WEEK = 5;
+const MAX_DAYS_IN_WEEK = 7;
+const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
 
 const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
 
-
+    let date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    let firstDay = new Date(y, m, 1);
+    let lastDay = new Date(y, m + 1, 0);
+    let CurrentDay = 0;
 
     const getListData = (value) => {
         let listData;
@@ -17,12 +27,12 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
 
     const dateCellRender = (value) => {
 
-        const listData = getListData(value);
+        const listData = getListData(new moment(new Date().setDate(value)));
         return (
 
             <ul className="events">
                 {listData.map((item) => (
-                    <li key={item.content} >
+                    <li key={item.content}>
                         <Badge status={item.type} text={item.content} />
                     </li>
                 ))}
@@ -31,83 +41,78 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
         );
     };
 
-    const onSelect = (value) => {
+    const handleClick = (clickDate) => {
 
-        setEventDate(value);
+
+        setEventDate(clickDate);
         setShowModalForm(true);
     };
 
-    return <Calendar
-        dateCellRender={dateCellRender}
-        onSelect={onSelect}
-        headerRender={({ value, type, onChange, onTypeChange }) => {
-            const start = 0;
-            const end = 12;
-            const monthOptions = [];
+    const RenderWeek = () => {
 
-            const current = value.clone();
-            const localeData = value.localeData();
-            const months = [];
-            for (let i = 0; i < 12; i++) {
-                current.month(i);
-                months.push(localeData.monthsShort(current));
-            }
-            for (let index = start; index < end; index++) {
-                monthOptions.push(
-                    <Select.Option className="month-item" key={`${index}`}>
-                        {months[index]}
-                    </Select.Option>,
-                );
-            }
-            const month = value.month();
 
-            const year = value.year();
-            const options = [];
-            for (let i = year - 10; i < year + 10; i += 1) {
-                options.push(
-                    <Select.Option key={i} value={i} className="year-item">
-                        {i}
-                    </Select.Option>,
-                );
-            }
-            return (
-                <div style={{ padding: 8 }}>
-                    <Typography.Title level={4}>Events Calendar</Typography.Title>
-                    <Row gutter={8}>
+        return <tr>
+            {(function (rows, i, len) {
+                while (i <= len) {
+                    if (i === firstDay.getDay() + 1 && CurrentDay === 0) {
+                        CurrentDay = 1;
+                    }
+                    if (CurrentDay == 0) {
+                        rows.push(<td>
 
-                        <Col>
-                            <Select
-                                size="small"
-                                dropdownMatchSelectWidth={false}
-                                className="my-year-select"
-                                onChange={newYear => {
-                                    const now = value.clone().year(Number(newYear));
-                                    onChange(now);
-                                }}
-                                value={String(year)}
-                            >
-                                {options}
-                            </Select>
-                        </Col>
-                        <Col>
-                            <Select
-                                size="small"
-                                dropdownMatchSelectWidth={false}
-                                value={String(month)}
-                                onChange={selectedMonth => {
-                                    const newValue = value.clone();
-                                    newValue.month(parseInt(selectedMonth, 10));
-                                    onChange(newValue);
-                                }}
-                            >
-                                {monthOptions}
-                            </Select>
-                        </Col>
-                    </Row>
-                </div>
-            );
-        }}
-    />;
+
+                        </td>)
+                    }
+                    else {
+                        if (CurrentDay <= lastDay.getDate()) {
+
+                            let clickDate = new moment(new Date().setDate(CurrentDay));
+                            rows.push(<td>
+                                <div className={CurrentDay === new Date().getDate() ? "currentDay" : "day"} onClick={() => {
+                                    handleClick(clickDate)
+                                }}>
+                                    {CurrentDay}
+                                    {dateCellRender(CurrentDay)}
+                                </div>
+                            </td>)
+                        }
+
+                        CurrentDay++;
+
+                    }
+
+                    i++;
+
+                }
+                return rows;
+            })([], 1, MAX_DAYS_IN_WEEK)}
+        </tr>
+    }
+
+    return (
+        <>
+            <div><h3>{monthNames[firstDay.getMonth()]}</h3></div>
+            <table>
+                <thead>
+
+                    <th>Sunday</th><th>Monday</th><th>Tuesday</th>
+                    <th>Wednesday</th><th>Thursday</th><th>Friday</th>
+                    <th>Saturday</th>
+                </thead>
+
+                <tbody>
+                    {(function (rows, i, len) {
+                        while (i <= len) {
+                            rows.push(RenderWeek())
+                            i++;
+                        }
+                        return rows;
+                    })([], 1, MAX_NO_OF_WEEK)}
+                </tbody>
+            </table>
+
+        </>
+    )
 };
 
 export default CalendarPicker;
