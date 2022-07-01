@@ -1,0 +1,11 @@
+
+.navDiv{
+    display: inline-flex;
+}
+.leftNav{
+    margin-right:"20px" !important
+}
+
+.rightNav{
+    margin-left:"20px" !important
+}

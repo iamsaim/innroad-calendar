@@ -6,13 +6,11 @@ import moment from 'moment';
 
 const MAX_NO_OF_WEEK = 5;
 const MAX_DAYS_IN_WEEK = 7;
-const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-];
 
-const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
+const CalendarPicker = ({ setEventDate, events, setShowModalForm, calendarMonth }) => {
 
-    let date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    let date = calendarMonth,
+        y = date.getFullYear(), m = date.getMonth();
     let firstDay = new Date(y, m, 1);
     let lastDay = new Date(y, m + 1, 0);
     let CurrentDay = 0;
@@ -20,7 +18,7 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
     const getListData = (value) => {
         let listData;
 
-        listData = events.filter(x => x.date.format("MMM Do YY") == value.format("MMM Do YY"))
+        listData = events.filter(x => x.date.format("MMM Do YY") === value.format("MMM Do YY"))
 
         return listData || [];
     };
@@ -57,7 +55,7 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
                     if (i === firstDay.getDay() + 1 && CurrentDay === 0) {
                         CurrentDay = 1;
                     }
-                    if (CurrentDay == 0) {
+                    if (CurrentDay === 0) {
                         rows.push(<td>
 
 
@@ -91,13 +89,18 @@ const CalendarPicker = ({ setEventDate, events, setShowModalForm }) => {
 
     return (
         <>
-            <div><h3>{monthNames[firstDay.getMonth()]}</h3></div>
+
             <table>
                 <thead>
-
-                    <th>Sunday</th><th>Monday</th><th>Tuesday</th>
-                    <th>Wednesday</th><th>Thursday</th><th>Friday</th>
-                    <th>Saturday</th>
+                    <tr>
+                        <td>Sunday</td>
+                        <td>Monday</td>
+                        <td>Tuesday</td>
+                        <td>Wednesday</td>
+                        <td>Thursday</td>
+                        <td>Friday</td>
+                        <td>Saturday</td>
+                    </tr>
                 </thead>
 
                 <tbody>
