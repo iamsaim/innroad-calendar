@@ -7,7 +7,6 @@
   width: 100%;
   overflow: hidden;
   font-size: 12px;
-  white-space: nowrap;
   text-overflow: ellipsis;
 }
 .notes-month {
@@ -33,11 +32,6 @@ table{
   height: 190px;
   border:1px solid black;
   background: #eaeaf3;
-}
-
-.events .ant-badge-status {
-  white-space: break-spaces !important;
-
 }
 
 
