@@ -4,7 +4,7 @@ import style from './Calendar.module.scss'
 import { Badge } from 'antd';
 import moment from 'moment';
 
-const MAX_NO_OF_WEEK = 5;
+const MAX_NO_OF_WEEK = 6;
 const MAX_DAYS_IN_WEEK = 7;
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
