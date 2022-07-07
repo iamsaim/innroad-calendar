@@ -1,7 +1,7 @@
+/* eslint-disable default-param-last */
 import * as types from "../Constants";
 
 export const eventReducer = (state = [], action) => {
-    debugger;
     switch (action.type) {
 
         case types.ADD_EVENT_SUCCESS:

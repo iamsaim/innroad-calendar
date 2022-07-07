@@ -1,12 +1,11 @@
-import React from "react";
 import { Modal, Form, Input, TimePicker, Button } from "antd";
+import PropTypes from 'prop-types';
 
-const EventForm = ({ show, AddEvent, date, OnCancel }) => {
+const EventForm = function EventForm({ show, AddEvent, date, OnCancel }) {
 
     const onFinish = (values) => {
         AddEvent(values);
     };
-
 
     return (
         <Modal
@@ -23,7 +22,7 @@ const EventForm = ({ show, AddEvent, date, OnCancel }) => {
                 onFinish={onFinish}
                 autoComplete="off"
                 initialValues={{
-                    "date": date
+                    "date": date,
                 }}
             >
                 <Form.Item
@@ -38,10 +37,8 @@ const EventForm = ({ show, AddEvent, date, OnCancel }) => {
                     name="date"
 
                 >
-                    <Input disabled={true} />
+                    <Input disabled />
                 </Form.Item>
-
-
 
                 <Form.Item
                     label="Start time"
@@ -74,6 +71,17 @@ const EventForm = ({ show, AddEvent, date, OnCancel }) => {
             </Form>
         </Modal>
     );
+};
+
+EventForm.propTypes = {
+    AddEvent: PropTypes.func.isRequired,
+    OnCancel: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
+    date: PropTypes.instanceOf(Date),
+}
+
+EventForm.defaultProps = {
+    date: null,
 };
 
 export default EventForm;

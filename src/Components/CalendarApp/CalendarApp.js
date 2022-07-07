@@ -1,16 +1,17 @@
+import { Button } from "antd";
+import moment from "moment";
+import PropTypes from 'prop-types';
+import { useState } from "react";
+import { connect } from "react-redux";
+import { addEvent } from "../../redux/Actions/eventAction";
 import CalendarPicker from "../CalendarPicker/CalendarPicker";
 import EventForm from "./EventForm";
-import React, { useState, useEffect } from "react"
-import moment from "moment";
-import { addEvent } from "../../redux/Actions/eventAction";
-import { connect } from "react-redux";
-import { Button } from "antd";
 import "./CalendarApp.css";
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "July", "August", "September", "October", "November", "December",
 ];
-const CalendarApp = (props) => {
+const CalendarApp = function CalendarApp({ addEventProp, events }) {
     const [showModalForm, setShowModalForm] = useState(false);
     const [eventDate, setEventDate] = useState();
     const [count, SetCount] = useState(0);
@@ -19,22 +20,19 @@ const CalendarApp = (props) => {
     const OnCancel = () => {
         setShowModalForm(false)
         setEventDate("");
+        SetCount(count + 1);
     };
 
     const AddEvent = (values) => {
-        debugger;
-        var event = {
+        const event = {
             type: 'success',
-            content: values.eventName + ' From: ' + moment(values.startTime).format("hh:mm:ss a") + ' To: ' + moment(values.endTime).format("hh:mm:ss a"),
-            date: values.date
-        }
-        props.addEvent(event);
+            content: `${values.eventName}! From: ${moment(values.startTime).format("hh:mm:ss a")}! 
+            To: ${moment(values.endTime).format("hh:mm:ss a")}!`,
+            date: values.date,
+        };
+        addEventProp(event);
         OnCancel();
-
     };
-    useEffect(() => {
-        SetCount(count + 1);
-    }, [eventDate]);
     return (
         <>
             <div className="navDiv">
@@ -49,7 +47,7 @@ const CalendarApp = (props) => {
                 }>{">>"}</Button></div>
             <CalendarPicker
                 setEventDate={setEventDate}
-                events={props.events}
+                events={events}
                 setShowModalForm={setShowModalForm}
                 calendarMonth={month}
             />
@@ -63,15 +61,19 @@ const CalendarApp = (props) => {
     );
 };
 
+CalendarApp.propTypes = {
+    addEventProp: PropTypes.func.isRequired,
+    events: PropTypes.arrayOf(Object).isRequired,
+}
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
 
     return {
-        events: state.events
+        events: state.events,
     }
 }
 const mapDispatchToProps = {
-    addEvent,
+    addEventProp: addEvent,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarApp);
